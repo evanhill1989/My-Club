@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { ListItem } from "react-native-elements";
 
 const GameScreen = () => {
-  const nbaGames = useSelector((state) => state.nba.gamesArray);
   console.log("This is the nbaGames data returned", nbaGames);
   // it is an array now.
   const renderNbaGame = ({ item }) => {

@@ -1,16 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { baseNbaUrl } from "../../app/shared/nbaUrls/baseNbaUrl";
+
 import { gameData } from "../../app/shared/nbaScoreboard";
+import { espnLiveGames } from "../../app/shared/nbaUrls/espnLiveGames";
 
-// export const fetchGame = createAsyncThunk("nba/fetchGame", async () => {
-//   const data = gameData.json();
-//   // Possible I introduced an error here
+export const fetchGames = createAsyncThunk(
+  "nba/fetchGame",
 
-//   return data.events;
-// });
+  async () => {
+    const scoreboard = await fetch(espnLiveGames);
+    const response = scoreboard.json();
+    console.log("Response inside async fetch ", response);
+    return response;
+  }
+);
 
 const initialState = {
-  gamesArray: gameData.events,
+  gamesArray: [],
+
   status: "idle",
   error: null,
 };
@@ -19,19 +25,19 @@ const nbaSlice = createSlice({
   name: "nba",
   initialState,
   reducers: {},
-  // extraReducers: {
-  //   [fetchGame.pending]: (state, action) => {
-  //     state.status = "loading";
-  //   },
-  //   [fetchGame.fulfilled]: (state, action) => {
-  //     state.status = "succeeded";
-  //     state.gamesArray = action.payload;
-  //   },
-  //   [fetchGame.rejected]: (state, action) => {
-  //     state.status = "failed";
-  //     state.error = action.error.message;
-  //   },
-  // },
+  extraReducers: {
+    [fetchGames.pending]: (state, action) => {
+      state.status = "loading";
+    },
+    [fetchGames.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.gamesArray = action.payload;
+    },
+    [fetchGames.rejected]: (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message;
+    },
+  },
 });
 
 export const nbaReducer = nbaSlice.reducer;

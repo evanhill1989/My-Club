@@ -1,4 +1,4 @@
-export const gameData = {
+export const gamesData = {
   leagues: [
     {
       id: "46",
